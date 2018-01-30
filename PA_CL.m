@@ -48,38 +48,6 @@ mue(1) = UE(204, 207);
 % selectedMUE = mue(mueNumber);
 MBS = BaseStation(0 , 0 , 50);
 %%
-%Generate fbsCount=16 FBSs, FemtoStation is the agent of RL algorithm
-FBS_Max = cell(1,16);
-for i=1:3
-%     if i<= fbsCount
-        FBS_Max{i} = mmWaveBS(180+(i-1)*35,150, MBS, mue, 10);
-%     end
-end
-
-for i=1:3
-%     if i+3<= fbsCount
-        FBS_Max{i+3} = mmWaveBS(165+(i-1)*30,180, MBS, mue, 10);
-%     end
-end
-
-for i=1:4
-%     if i+6<= fbsCount
-        FBS_Max{i+6} = mmWaveBS(150+(i-1)*35,200, MBS, mue, 10);
-%     end
-end
-
-for i=1:3
-%     if i+10<= fbsCount
-        FBS_Max{i+10} = mmWaveBS(160+(i-1)*35,240, MBS, mue, 10);
-%     end
-end
-
-for i=1:3
-%     if i+13<= fbsCount
-        FBS_Max{i+13} = mmWaveBS(150+(i-1)*35,280, MBS, mue, 10);
-%     end
-end
-%%
 % 
 FBS = cell(1,fbsCount);
 
