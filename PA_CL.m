@@ -198,6 +198,6 @@ end
     answer.time = tt - extra_time;
     answer.q = q_ue;
     QFinal = answer;
-    save(sprintf('Jan30/R_4_q10/pro_%d_%d_%d.mat',Npower, bs_count, saveNum),'QFinal');
+    save(sprintf('DATA/Jan30/R_4_q10/pro_%d_%d_%d.mat',Npower, bs_count, saveNum),'QFinal');
 %     FBS_out = BS_list;
 end
