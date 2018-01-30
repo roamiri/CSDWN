@@ -1,7 +1,7 @@
 %% 
 %   Function to construct wirelss network's access points based on
 %   different frequency bands
-% band can be 'LTE' or 'mmWave'
+%   band can be 'LTE' or 'mmWave'
 %%
 
 function [BS_list] = generate_network(max_num_BS, centerX, centerY, Radius, band, graphics)
