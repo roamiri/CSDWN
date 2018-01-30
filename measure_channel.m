@@ -1,14 +1,14 @@
-function [G, L] = measure_channel(FBS,MBS,MUE,NumRealization)
+function [G, L] = measure_channel(FBS,NumRealization)
     fbsNum = size(FBS,2);
-    G = zeros(fbsNum+1, fbsNum+1);
-    L = zeros(fbsNum+1, fbsNum+1);
+    G = zeros(fbsNum, fbsNum);
+    L = zeros(fbsNum, fbsNum);
     c = 3e8; f=28e9;
     lambda = c/f;
     %lognormal shadowing
     sigma = 8.7; %dB
 %     NumRealization = 1e1;
     X = sigma * randn(fbsNum, fbsNum, 1e1);
-
+    Y = zeros(fbsNum,fbsNum);
     for i=1:fbsNum
         for j=1:fbsNum
             Y(i,j)=(sum(X(i,j,:))/1e1);
@@ -27,22 +27,13 @@ function [G, L] = measure_channel(FBS,MBS,MUE,NumRealization)
             end
             L(i,j) = 10^((PL0)/10);
         end
-        d = sqrt((xAgent-MUE.X)^2+(yAgent-MUE.Y)^2);
-        PL0 = 62.3+32.*log10(d/5);
-        L(i,fbsNum+1) = 10.^((PL0 )/10);
-        
-        d = sqrt((MBS.X-FBS{i}.FUEX)^2+(MBS.Y-FBS{i}.FUEY)^2);
-        PL_BS = 62.3+32*log10(d/5);
-        L(fbsNum+1,i) = 10^((PL_BS)/10);
     end
-    d = sqrt((MBS.X-MUE.X).^2+(MBS.Y-MUE.Y).^2);
-    PL_BS = 62.3+40*log10(d/5);
-    L(fbsNum+1,fbsNum+1) = 10.^((PL_BS)/10);
     
-    Hij = abs((1/sqrt(2)) * (randn(fbsNum+1, fbsNum+1, NumRealization)+1i*randn(fbsNum+1, fbsNum+1, NumRealization)));
+    
+    Hij = abs((1/sqrt(2)) * (randn(fbsNum, fbsNum, NumRealization)+1i*randn(fbsNum, fbsNum, NumRealization)));
     hij = Hij.^2;
-    for i=1:fbsNum+1
-        for j=1:fbsNum+1
+    for i=1:fbsNum
+        for j=1:fbsNum
             G(i,j)=(sum(hij(i,j,:))/NumRealization);
         end
     end

@@ -3,7 +3,7 @@
 %   Reinforcement Learning; Cooperative Learning (CL) 
 %   And it takes the number of Npower as the number of columns of Q-Table
 %
-function FBS_out = PA_CL(Npower, bs_count, BS_Max, bs_permutation, NumRealization, saveNum, CL)
+function PA_CL(Npower, bs_count, BS_Max, bs_permutation, NumRealization, saveNum, CL)
 
 %% Initialization
 clc;
@@ -62,7 +62,7 @@ end
     fbsNum = size(BS_list,2);
     G = zeros(fbsNum+1, fbsNum+1); % Matrix Containing small scale fading coefficients
     L = zeros(fbsNum+1, fbsNum+1); % Matrix Containing large scale fading coefficients
-    [G, L] = measure_channel(BS_list,MBS,mue,NumRealization);
+    [G, L] = measure_channel(BS_list,NumRealization);
     %% Main Loop
 %     fprintf('Loop for %d number of FBS :\t', fbsCount);
 %      textprogressbar(sprintf('calculating outputs:'));
@@ -179,7 +179,6 @@ end
         end
     end
 %     Q = sumQ;
-    answer.mue = mue;
     answer.Q = sumQ;
     answer.Error = errorVector;
     answer.FBS = BS_list;
@@ -200,5 +199,5 @@ end
     answer.q = q_ue;
     QFinal = answer;
     save(sprintf('Jan30/R_4_q10/pro_%d_%d_%d.mat',Npower, bs_count, saveNum),'QFinal');
-    FBS_out = BS_list;
+%     FBS_out = BS_list;
 end
