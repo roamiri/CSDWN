@@ -1,73 +1,44 @@
 %%
-mue(1) = UE(204, 207);
-fbsCount = 16;
-FBS = cell(1,fbsCount);
-BS = BaseStation(0 , 0 , 50);    
-    for i=1:3
-        if i<= fbsCount
-            FBS{i} = FemtoStation(180+(i-1)*35,150, BS, mue, 10);
-        end
-    end
 
-    for i=1:3
-        if i+3<= fbsCount
-            FBS{i+3} = FemtoStation(165+(i-1)*30,180, BS, mue, 10);
-        end
-    end
 
-    for i=1:4
-        if i+6<= fbsCount
-            FBS{i+6} = FemtoStation(150+(i-1)*35,200, BS, mue, 10);
-        end
-    end
+function DrawGeographic(BS_list,centerX, centerY, Radius)
 
-    for i=1:3
-        if i+10<= fbsCount
-            FBS{i+10} = FemtoStation(160+(i-1)*35,240, BS, mue, 10);
-        end
-    end
-
-    for i=1:3
-        if i+13<= fbsCount
-            FBS{i+13} = FemtoStation(150+(i-1)*35,280, BS, mue, 10);
-        end
-    end
-%%
 figure;
 hold on;
 grid on;
 
-dM1 = 15; dM2 = 50; dM3 = 125; 
+BS_cnt = size(BS_list,2);
 
-dB1 = 50; dB2 = 150; dB3 = 400;
+minx = inf; maxx = -inf;
+miny = inf; maxy = -inf;
 
-BS = BaseStation(0 , 0 , 50);
-
-fbs = FBS{1};
-p1 = plot(fbs.X, fbs.Y, 'r');
-p1.Marker = '*';
-p2 = plot(fbs.X, fbs.Y+10, 'k');
-p2.Marker = 'x';
-for i=2:16
-    fbs = FBS{i};
-    p = plot(fbs.X, fbs.Y, 'r','LineWidth',0.75,'MarkerSize',8);
+for i=1:BS_cnt
+    bs = BS_list{i};
+    bsX = bs.X; bsY=bs.Y;
+    if bs.X<minx; minx=bsX;end
+    if bs.X>maxx; maxx=bsX;end
+    if bs.Y<miny; miny=bsY;end
+    if bs.Y>miny; maxy=bsY;end
+    
+    p = plot(bsX, bsY, 'r','LineWidth',0.75,'MarkerSize',8);
     p.Marker = '*';
-    p = plot(fbs.X, fbs.Y+10, 'k','LineWidth',0.75,'MarkerSize',8);
+    p = plot(bsX, bsY+10, 'k','LineWidth',0.75,'MarkerSize',8);
     p.Marker = 'x'; 
 end
-axis([-300,350,-100,350]);
+% axis([-300,350,-100,350]);
+circleX = (minx+maxx)/2;
+circleY = (miny+maxy)/2;
+circle(centerX, centerY, Radius, 'r');
 
-circle(selectedMUE.X,selectedMUE.Y,dM1, 'r');
-circle(selectedMUE.X,selectedMUE.Y,dM2, 'r');
-circle(selectedMUE.X,selectedMUE.Y,dM3, 'r');
-
-title('System Model','FontSize',14, 'FontWeight','bold');
+lambda = (BS_cnt)/(pi*(Radius/1000)^2);
+title(sprintf('System Model,numBS=%d, \x03bb = %g',BS_cnt,lambda),'FontSize',12);
 xlabel('x position','FontSize',14, 'FontWeight','bold');
 ylabel('y position','FontSize',14, 'FontWeight','bold');
-legend([p3 p1 p2 p4],{'BS','FBS', 'FUE', 'MUE'});
+% legend([p3 p1 p2 p4],{'BS','FBS', 'FUE', 'MUE'});
 box on;
 set(gca,'fontsize',14, 'FontWeight','bold');
-
+axis equal
+end
 
 function h = circle(x,y,r, color)
 hold on

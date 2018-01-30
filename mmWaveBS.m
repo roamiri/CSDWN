@@ -21,11 +21,11 @@ classdef mmWaveBS
       Q
    end
    methods
-      function obj = mmWaveBS(xPos, yPos, BS, MUE, dFUE)
+      function obj = mmWaveBS(xPos, yPos, dFUE)
         obj.X = xPos;
         obj.Y = yPos;
-        obj.dBS = sqrt((xPos-BS.X)^2 + (yPos-BS.Y)^2);
-        obj.dMUE = nearest_MUE(xPos, yPos, MUE);% sqrt((xPos-MUE.X)^2 + (yPos-MUE.Y)^2); %distance to nearest MUE
+%         obj.dBS = sqrt((xPos-BS.X)^2 + (yPos-BS.Y)^2);
+%         obj.dMUE = nearest_MUE(xPos, yPos, MUE);% sqrt((xPos-MUE.X)^2 + (yPos-MUE.Y)^2); %distance to nearest MUE
         obj.dFUE = dFUE;
         obj.FUEX = xPos;
         obj.FUEY = yPos+dFUE;
