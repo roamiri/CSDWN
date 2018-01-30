@@ -1,5 +1,4 @@
-function SINR = SINR_UE(G, L, FBS, MBS, sigma2)
-    MBS_P = MBS.P;
+function SINR = SINR_UE(G, L, FBS, sigma2)
     fbsNum = size(FBS,2);
     SINR = zeros(1,fbsNum);
     sigma = 10^((sigma2-30)/10);
