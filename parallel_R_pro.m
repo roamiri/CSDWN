@@ -6,14 +6,15 @@ function parallel_R_pro(pref_poolSize)
 parpool(pref_poolSize)
 BS_list = generate_network(40, 200, 200, 200,'mmWave',true);
 BS_list_size = size(BS_list,2);
-permutationsMat = zeros(30,BS_list_size);
 
-for i=1:30
+permutationsMat = zeros(200,BS_list_size);
+
+for i=1:200
     permutationsMat(i,:) = randperm(BS_list_size,BS_list_size);
 end
 
-parfor_progress(30);
- parfor i=1:30
+parfor_progress(200);
+ parfor i=1:200
     runForAll(BS_list,permutationsMat(i,:),i);
     pause(rand);
     parfor_progress;
