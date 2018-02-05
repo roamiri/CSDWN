@@ -47,11 +47,10 @@ end
         BS_list{j} = fbs;
     end
 %% Calc channel coefficients
-    G = zeros(bs_count+1, bs_count+1); % Matrix Containing small scale fading coefficients
-    L = zeros(bs_count+1, bs_count+1); % Matrix Containing large scale fading coefficients
+    G = zeros(bs_count, bs_count); % Matrix Containing small scale fading coefficients
+    L = zeros(bs_count, bs_count); % Matrix Containing large scale fading coefficients
     [G, L] = measure_channel(BS_list,NumRealization);
     %% Main Loop
-%     fprintf('Loop for %d number of FBS :\t', fbsCount);
 %      textprogressbar(sprintf('calculating outputs:'));
     count = 0;
     errorVector = zeros(1,Iterations);
@@ -60,94 +59,66 @@ end
     for episode = 1:Iterations
 %          textprogressbar((episode/Iterations)*100);
         sumQ = sumQ * 0.0;
-        for j=1:size(BS_list,2)
+        for j=1:bs_count
             fbs = BS_list{j};
             sumQ = sumQ + fbs.Q; 
         end
         
         if (episode/Iterations)*100 < 80
             % Action selection with epsilon=0.1
-            for j=1:size(BS_list,2)
+            for j=1:bs_count
                 fbs = BS_list{j};
                 if rand<epsilon
 %                     fbs = fbs.setPower(actions(floor(rand*Npower+1)));
-                      fbs.P = actions(floor(rand*Npower+1));
+                      fbs.P_index = floor(rand*Npower+1);
+                      fbs.P = actions(fbs.P_index);
                 else
-                    a = tic;
-                    for kk = 1:size(states,1)
-                        
-                        if states(kk,:) == fbs.state
-                            break;
-                        end
-                    end
+                    kk = fbs.S_index;
                     if CL == 1 
                         [M, index] = max(sumQ(kk,:));     % CL method
                     else                                    
                         [M, index] = max(fbs.Q(kk,:));   %IL method
                     end
 %                     fbs = fbs.setPower(actions(index));
-                      a1 = toc(a);
+                      fbs.P_index = index;
                       fbs.P = actions(index);
-                      
                 end
                 BS_list{j} = fbs;
             end
         else
-            a = tic;
-            for j=1:size(BS_list,2)
+            for j=1:bs_count
                 fbs = BS_list{j};
-                for kk = 1:size(states,1)
-                    if states(kk,:) == fbs.state
-                        break;
-                    end
-                end
-                
+                kk = fbs.S_index;
                 if CL == 1 
                     [M, index] = max(sumQ(kk,:));     % CL method
                 else                                    
                     [M, index] = max(fbs.Q(kk,:));   %IL method
                 end
 %                 fbs = fbs.setPower(actions(index));
+                fbs.P_index = index;
                 fbs.P = actions(index);
                 BS_list{j} = fbs;
             end
-            a1 = toc(a);
-        end 
-%         extra_time = extra_time + a1;
+        end
+        
         % calc FUEs and MUEs capacity
         SINR_UE_Vec = SINR_UE(G, L, BS_list,-120);
         
-        for j=1:size(BS_list,2)
+        for j=1:bs_count
             fbs = BS_list{j};
 %             fbs = fbs.setCapacity(log2(1+SINR_FUE_Vec(j)));
             fbs.C_FUE = log2(1+SINR_UE_Vec(j));
+            fbs.SINR = SINR_UE_Vec(j);
             BS_list{j}=fbs;
         end
-        for j=1:size(BS_list,2)
+        for j=1:bs_count
             fbs = BS_list{j};
             qMax=max(fbs.Q,[],2);
-            a = tic;
-            for jjj = 1:31
-                if actions(1,jjj) == fbs.P
-                    break;
-                end
-            end
-            for kk = 1:size(states,1)
-                if states(kk,:) == fbs.state
-                    break;
-                end
-            end
-            extra_time = extra_time + toc(a);
+            jjj = fbs.P_index;
+            kk = fbs.S_index;
             % CALCULATING NEXT STATE AND REWARD
-%             beta = fbs.dMUE/dth;
-            R = R_4(fbs.C_FUE, q_ue);
-            a = tic;
-            for nextState=1:size(states,1)
-                if states(nextState,:) == fbs.state
-                    fbs.Q(kk,jjj) = fbs.Q(kk,jjj) + alpha*(R+gamma*qMax(nextState)-fbs.Q(kk,jjj));
-                end
-            end
-            extra_time = extra_time + toc(a);
+            R = R_1(fbs.C_FUE, fbs.SINR, SINR_th);
+            fbs.Q(kk,jjj) = fbs.Q(kk,jjj) + alpha*(R+gamma*qMax(kk)-fbs.Q(kk,jjj));
             BS_list{j}=fbs;
         end
 
@@ -183,8 +154,7 @@ end
     answer.episode = episode;
     tt = toc(total);
     answer.time = tt - extra_time;
-    answer.q = q_ue;
+    answer.threshold = SINR_th;
     QFinal = answer;
     save(sprintf('DATA/Jan30/R_4_q10/pro_%d_%d_%d.mat',Npower, bs_count, saveNum),'QFinal');
-%     FBS_out = BS_list;
 end

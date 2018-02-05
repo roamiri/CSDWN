@@ -28,8 +28,7 @@ function [G, L] = measure_channel(FBS,NumRealization)
             L(i,j) = 10^((PL0)/10);
         end
     end
-    
-    
+        
     Hij = abs((1/sqrt(2)) * (randn(fbsNum, fbsNum, NumRealization)+1i*randn(fbsNum, fbsNum, NumRealization)));
     hij = Hij.^2;
     for i=1:fbsNum
