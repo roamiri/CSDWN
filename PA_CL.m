@@ -11,9 +11,7 @@ total = tic;
 %% Parameters
 Pmin = -10;                                                                                                                                                                                                                                                                                                                                                                           %dBm
 Pmax = 35; %dBm
-%StepSize = (Pmax-Pmin)/Npower; % dB
-
-%sinr_th = 1.64;%10^(2/10); % I am not sure if it is 2 or 20!!!!!
+SINR_th = 2.82;%10^(2/10); % I am not sure if it is 2 or 20!!!!!
 %gamma_th = log2(1+sinr_th);
 
 %% Minimum Rate Requirements for users
@@ -24,24 +22,15 @@ q_ue = 10.0;
 actions = linspace(Pmin, Pmax, Npower);
 
 % States
-states = allcomb(0:3 , 0:3); % states = (dMUE , dBS)
+states = allcomb(0:3); % states = (ring relative to cluster head (CH))
 
 % Q-Table
-% Q = zeros(size(states,1) , size(actions , 2));
 Q_init = ones(size(states,1) , Npower) * 0.0;
 Q1 = ones(size(states,1) , Npower) * inf;
 sumQ = ones(size(states,1) , Npower) * 0.0;
-% meanQ = ones(size(states,1) , Npower) * 0.0;
 
 alpha = 0.5; gamma = 0.9; epsilon = 0.1 ; Iterations = 50000;
-%% Generate the UEs
-% mue(1) = UE(204, 207);
-% mue(1) = UE(150, 150);
-% mue(1) = UE(-200, 0);
-% selectedMUE = mue(mueNumber);
-% MBS = BaseStation(0 , 0 , 50);
 %%
-% 
 BS_list = cell(1,bs_count);
 
 for i=1:bs_count
@@ -49,19 +38,17 @@ for i=1:bs_count
 end
 
     %% Initialize Agents (FBSs)
-%     permutedPowers = randperm(Npower,size(FBS,2));
-    
-    for j=1:size(BS_list,2)
+    bs_count = size(BS_list,2);
+    for j=1:bs_count
         fbs = BS_list{j};
 %         fbs = fbs.setPower(actions(permutedPowers(j)));
-        fbs = fbs.getDistanceStatus;
+        fbs = fbs.getDistanceStatus();
         fbs = fbs.setQTable(Q_init);
         BS_list{j} = fbs;
     end
 %% Calc channel coefficients
-    fbsNum = size(BS_list,2);
-    G = zeros(fbsNum+1, fbsNum+1); % Matrix Containing small scale fading coefficients
-    L = zeros(fbsNum+1, fbsNum+1); % Matrix Containing large scale fading coefficients
+    G = zeros(bs_count+1, bs_count+1); % Matrix Containing small scale fading coefficients
+    L = zeros(bs_count+1, bs_count+1); % Matrix Containing large scale fading coefficients
     [G, L] = measure_channel(BS_list,NumRealization);
     %% Main Loop
 %     fprintf('Loop for %d number of FBS :\t', fbsCount);

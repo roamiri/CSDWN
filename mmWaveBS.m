@@ -3,7 +3,6 @@ classdef mmWaveBS
       X
       Y
       P
-      dBS
       dMUE
       dFUE
       FUEX
@@ -11,24 +10,23 @@ classdef mmWaveBS
       M  % distance with MUE
       B  % distance with BS
       dM1 = 50; dM2 = 100; dM3 = 150;
-%       dM1 = 500; dM2 = 520; dM3 = 530;
-%       dB1 = 50; dB2 = 150; dB3 = 400;
-      dB1 = 250; dB2 = 300; dB3 = 350;
       state = zeros(1,2)
       powerProfile = []
       C_FUE
       C_profile = []
       Q
+      Xref
+      Yref
    end
    methods
-      function obj = mmWaveBS(xPos, yPos, dFUE)
+      function obj = mmWaveBS(xPos, yPos, dFUE, centerX, centerY)
         obj.X = xPos;
         obj.Y = yPos;
-%         obj.dBS = sqrt((xPos-BS.X)^2 + (yPos-BS.Y)^2);
-%         obj.dMUE = nearest_MUE(xPos, yPos, MUE);% sqrt((xPos-MUE.X)^2 + (yPos-MUE.Y)^2); %distance to nearest MUE
         obj.dFUE = dFUE;
         obj.FUEX = xPos;
         obj.FUEY = yPos+dFUE;
+        obj.Xref = centerX;
+        obj.Yref = centerY;
       end
       
       function obj = setQTable(obj,QTable)
@@ -46,24 +44,15 @@ classdef mmWaveBS
 %         obj.C_profile = [obj.C_profile c];
       end
       function obj = getDistanceStatus(obj)
+          obj.dMUE = sqrt((obj.X-obj.Xref)^2+(obj.Y-obj.Yref)^2);
           if(obj.dMUE <= obj.dM1 )
-              obj.state(1) = 0;
+              obj.state = 0;
           elseif(obj.dMUE <= obj.dM2 )
-              obj.state(1) = 1;
+              obj.state = 1;
           elseif(obj.dMUE <= obj.dM3 )
-              obj.state(1) = 2;
+              obj.state = 2;
           else
-              obj.state(1) = 3;
-          end
-          
-          if(obj.dBS <= obj.dB1 )
-              obj.state(2) = 0;
-          elseif(obj.dBS <= obj.dB2 )
-              obj.state(2) = 1;
-          elseif(obj.dBS <= obj.dB3 )
-              obj.state(2) = 2;
-          else
-              obj.state(2) = 3;
+              obj.state = 3;
           end
       end
    end

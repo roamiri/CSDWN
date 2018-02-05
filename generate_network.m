@@ -16,7 +16,7 @@ function [BS_list] = generate_network(max_num_BS, centerX, centerY, Radius, band
                 X = centerX+(-1)^j*(j-1)*35;
                 Y = centerY+(-1)^i*(i-1)*30;
                 if distance(centerX, centerY, X, Y) <= Radius
-                    mmWaveBS_list{cnt} = mmWaveBS(X,Y,10);
+                    mmWaveBS_list{cnt} = mmWaveBS(X,Y,10, centerX, centerY);
                     cnt = cnt+1;
                 end
                 if cnt > max_num_BS 
