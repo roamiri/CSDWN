@@ -9,7 +9,7 @@ function PA_CL(Npower, bs_count, BS_Max, bs_permutation, NumRealization, saveNum
 clc;
 total = tic;
 %% Parameters
-Pmin = -10;                                                                                                                                                                                                                                                                                                                                                                           %dBm
+Pmin = -30;                                                                                                                                                                                                                                                                                                                                                                           %dBm
 Pmax = 35; %dBm
 SINR_th = 2.82;%10^(2/10); % I am not sure if it is 2 or 20!!!!!
 %gamma_th = log2(1+sinr_th);
@@ -29,7 +29,7 @@ Q_init = ones(size(states,1) , Npower) * 0.0;
 Q1 = ones(size(states,1) , Npower) * inf;
 sumQ = ones(size(states,1) , Npower) * 0.0;
 
-alpha = 0.5; gamma = 0.9; epsilon = 0.1 ; Iterations = 50000;
+alpha = 0.5; gamma = 0.9; epsilon = 0.1 ; Iterations = 50*size(actions,2)*size(states,1)*bs_count;
 %%
 BS_list = cell(1,bs_count);
 
@@ -113,12 +113,13 @@ end
         end
         for j=1:bs_count
             fbs = BS_list{j};
-            qMax=max(fbs.Q,[],2);
+%             qMax=max(fbs.Q,[],2);
             jjj = fbs.P_index;
             kk = fbs.S_index;
             % CALCULATING NEXT STATE AND REWARD
             R = R_1(fbs.C_FUE, fbs.SINR, SINR_th);
-            fbs.Q(kk,jjj) = fbs.Q(kk,jjj) + alpha*(R+gamma*qMax(kk)-fbs.Q(kk,jjj));
+            fbs.Q(kk,jjj) = fbs.Q(kk,jjj) + alpha*(R-fbs.Q(kk,jjj));
+%             fbs.Q(kk,jjj) = fbs.Q(kk,jjj) + alpha*(R+gamma*qMax(kk)-fbs.Q(kk,jjj));
             BS_list{j}=fbs;
         end
 
@@ -143,6 +144,7 @@ end
     for j=1:size(BS_list,2)
         c_fue(1,j) = BS_list{1,j}.C_FUE;
         p_fue(1,j) = BS_list{1,j}.P;
+        sinr_fue(1,j) = BS_list{1,j}.SINR;
     end
     sum_CFUE = 0.0;
     for i=1:size(BS_list,2)
@@ -150,11 +152,12 @@ end
     end
     answer.C_FUE = c_fue;
     answer.P_FUE = p_fue;
+    answer.sinr = sinr_fue;
     answer.sum_CFUE = sum_CFUE;
     answer.episode = episode;
     tt = toc(total);
     answer.time = tt - extra_time;
     answer.threshold = SINR_th;
     QFinal = answer;
-    save(sprintf('DATA/Jan30/R_4_q10/pro_%d_%d_%d.mat',Npower, bs_count, saveNum),'QFinal');
+    save(sprintf('DATA/Feb6/R_1/pro_%d_%d_%d.mat',Npower, bs_count, saveNum),'QFinal');
 end
