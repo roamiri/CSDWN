@@ -9,7 +9,7 @@ sum_FUE = [];
 max_MUE = [];
 max_FUE = [];
 C_FUE_Mat = cell(1,16);
-for i=1:36
+for i=1:40
     fprintf('FBS num = %d\t', i);
     maxmue = 0.;
     maxfue = 0.;
@@ -20,8 +20,8 @@ for i=1:36
     Cnt = 0;
     lowCnt = 0;
 
-    for j=1:30
-        s = sprintf('DATA/Jan30/R_4_q10/pro_32_%d_%d.mat',i,j);
+    for j=1:200
+        s = sprintf('DATA/Feb6/R_1/pro_32_%d_%d.mat',i,j);
         filename = strcat(s);
         if exist(s)
             load(filename);
@@ -29,7 +29,7 @@ for i=1:36
 %                 cc = sum(C(40000:size(C,2)))/(-40000+size(C,2)+1);
 %                 mue_C = mue_C + QFinal.mue.C;
                 sumfue = sumfue + QFinal.sum_CFUE;
-                c_fue_vec = c_fue_vec + QFinal.C_FUE;
+                c_fue_vec = c_fue_vec + QFinal.sinr;
                 Cnt = Cnt+1;
         end
     end
@@ -44,7 +44,7 @@ figure;
 hold on;
 grid on;
 box on;
-plot( ones(1,36)*10., '--b', 'LineWidth',1);
+% plot( ones(1,36)*1.5, '--b', 'LineWidth',1);
 for i=1:36
     vec = C_FUE_Mat{i};
 %     vec_ref = C_FUE_Mat_ref{i};
@@ -59,7 +59,7 @@ end
 xlabel('Cluster size','FontSize',14, 'FontWeight','bold');
 ylabel('Capacity(b/s/HZ)','FontSize',14, 'FontWeight','bold');
 % xlim([2 14]);
-ylim([0 16]);
+% ylim([0 16]);
 % legend({'required QoS ($log_2(q_k)$)','CDP-Q'},'FontSize',14, 'FontWeight','bold','Interpreter','latex');
 %%
 figure;

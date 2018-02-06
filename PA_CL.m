@@ -4,7 +4,6 @@
 %   And it takes the number of Npower as the number of columns of Q-Table
 %
 function PA_CL(Npower, bs_count, BS_Max, bs_permutation, NumRealization, saveNum, CL)
-
 %% Initialization
 clc;
 total = tic;
