@@ -10,7 +10,7 @@ total = tic;
 %% Parameters
 Pmin = -30;                                                                                                                                                                                                                                                                                                                                                                           %dBm
 Pmax = 35; %dBm
-SINR_th = 2.82;%10^(2/10); % I am not sure if it is 2 or 20!!!!!
+SINR_th = 2.83;%10^(2/10); % I am not sure if it is 2 or 20!!!!!
 %gamma_th = log2(1+sinr_th);
 
 %% Minimum Rate Requirements for users
@@ -116,7 +116,8 @@ end
             jjj = fbs.P_index;
             kk = fbs.S_index;
             % CALCULATING NEXT STATE AND REWARD
-            R = R_1(fbs.C_FUE, fbs.SINR, SINR_th);
+%             R = R_1(fbs.C_FUE, fbs.SINR, SINR_th);
+            R = R_4(fbs.C_FUE, SINR_th);
             fbs.Q(kk,jjj) = fbs.Q(kk,jjj) + alpha*(R-fbs.Q(kk,jjj));
 %             fbs.Q(kk,jjj) = fbs.Q(kk,jjj) + alpha*(R+gamma*qMax(kk)-fbs.Q(kk,jjj));
             BS_list{j}=fbs;
