@@ -159,5 +159,5 @@ end
     answer.time = tt - extra_time;
     answer.threshold = SINR_th;
     QFinal = answer;
-    save(sprintf('DATA/Feb6/R_1/pro_%d_%d_%d.mat',Npower, bs_count, saveNum),'QFinal');
+    save(sprintf('DATA/Apr9/R_4_CL/pro_%d_%d_%d.mat',Npower, bs_count, saveNum),'QFinal');
 end
