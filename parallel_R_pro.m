@@ -4,7 +4,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function parallel_R_pro(pref_poolSize)
 parpool(pref_poolSize)
-BS_list = generate_network(40, 200, 200, 200,'mmWave',true);
+BS_list = generate_network(120, 200, 200, 200,'mmWave',false);
 BS_list_size = size(BS_list,2);
 
 permutationsMat = zeros(50,BS_list_size);
