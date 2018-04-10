@@ -40,7 +40,7 @@ for i=1:40
         if exist(s)
             load(filename);
                 sumfue = sumfue + QFinal.sum_CFUE;
-                c_fue_vec = c_fue_vec + QFinal.C_FUE;
+                c_fue_vec = c_fue_vec + QFinal.P_FUE;
                 Cnt = Cnt+1;
         end
     end
