@@ -8,7 +8,7 @@ function PA_CL(Npower, bs_count, BS_Max, bs_permutation, NumRealization, saveNum
 clc;
 total = tic;
 %% Parameters
-Pmin = -30;                                                                                                                                                                                                                                                                                                                                                                           %dBm
+Pmin = -10;                                                                                                                                                                                                                                                                                                                                                                           %dBm
 Pmax = 35; %dBm
 SINR_th = 2.83;%10^(2/10); % I am not sure if it is 2 or 20!!!!!
 %gamma_th = log2(1+sinr_th);

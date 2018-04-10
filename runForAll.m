@@ -5,6 +5,6 @@
 function runForAll(BS_list,bs_Permutation,saveNum)
 
 for i=1:size(BS_list,2)
-    PA_CL( 32, i, BS_list, bs_Permutation,1e3, saveNum, 0);
+    PA_Spon( 32, i, BS_list, bs_Permutation,1e3, saveNum, 0);
 end
 end
