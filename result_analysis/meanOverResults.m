@@ -12,12 +12,12 @@ for i=1:40
     Cnt = 0;
 
     for j=1:200
-        s = sprintf('../DATA/Apr10/R_4_CL/pro_32_%d_%d.mat',i,j);
+        s = sprintf('DATA/Apr10/R_4_CL/pro_32_%d_%d.mat',i,j);
         filename = strcat(s);
         if exist(s)
             load(filename);
-                sumfue = sumfue + QFinal.episode;
-                c_fue_vec = c_fue_vec + QFinal.P_FUE;
+                sumfue = sumfue + QFinal.sum_CFUE;
+                c_fue_vec = c_fue_vec + QFinal.C_FUE;
                 Cnt = Cnt+1;
         end
     end
@@ -35,12 +35,12 @@ for i=1:40
     Cnt = 0;
 
     for j=1:200
-        s = sprintf('../DATA/Apr10/R_4_IL/pro_32_%d_%d.mat',i,j);
+        s = sprintf('DATA/Apr10/spon/pro_32_%d_%d.mat',i,j);
         filename = strcat(s);
         if exist(s)
             load(filename);
-                sumfue = sumfue + QFinal.episode;
-                c_fue_vec = c_fue_vec + QFinal.P_FUE;
+                sumfue = sumfue + QFinal.sum_CFUE;
+                c_fue_vec = c_fue_vec + QFinal.C_FUE;
                 Cnt = Cnt+1;
         end
     end

@@ -4,17 +4,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function parallel_R_pro(pref_poolSize)
 parpool(pref_poolSize)
-BS_list = generate_network(40, 200, 200, 200,'mmWave',true);
+BS_list = generate_network(14, 200, 200, 200,'mmWave',true);
 BS_list_size = size(BS_list,2);
 
 permutationsMat = zeros(200,BS_list_size);
 
-for i=1:200
+for i=1:50
     permutationsMat(i,:) = randperm(BS_list_size,BS_list_size);
 end
 
-parfor_progress(200);
- parfor i=1:200
+parfor_progress(50);
+ parfor i=1:50
     runForAll(BS_list,permutationsMat(i,:),i);
     pause(rand);
     parfor_progress;
