@@ -12,7 +12,7 @@ for i=1:40
     Cnt = 0;
 
     for j=1:200
-        s = sprintf('DATA/Apr10/R_4_CL/pro_32_%d_%d.mat',i,j);
+        s = sprintf('DATA/Apr10/R_4_CL_Dense/pro_32_%d_%d.mat',i,j);
         filename = strcat(s);
         if exist(s)
             load(filename);
@@ -27,7 +27,7 @@ for i=1:40
 end
 %%    
 sum_FUE_IL = [];
-C_FUE_Mat_IL = cell(1,40);
+C_FUE_Mat_IL = cell(1,120);
 for i=1:40
     fprintf('FBS num = %d\t', i);
     sumfue = 0.;
@@ -35,12 +35,12 @@ for i=1:40
     Cnt = 0;
 
     for j=1:200
-        s = sprintf('DATA/Apr10/spon/pro_32_%d_%d.mat',i,j);
+        s = sprintf('DATA/Apr10/R_4_IL/pro_32_%d_%d.mat',i,j);
         filename = strcat(s);
         if exist(s)
             load(filename);
                 sumfue = sumfue + QFinal.sum_CFUE;
-                c_fue_vec = c_fue_vec + QFinal.P_FUE;
+                c_fue_vec = c_fue_vec + QFinal.C_FUE;
                 Cnt = Cnt+1;
         end
     end
@@ -54,7 +54,7 @@ hold on;
 grid on;
 box on;
 % plot( ones(1,14)*log2(2.83), '--b', 'LineWidth',1);
-for i=1:36
+for i=1:40
     vec = C_FUE_Mat{i};
 %     vec_ref = C_FUE_Mat_ref{i};
     for j=1:size(vec,2)
@@ -76,7 +76,7 @@ hold on;
 grid on;
 box on;
 % plot( ones(1,14)*log2(2.83), '--b', 'LineWidth',1);
-for i=1:36
+for i=1:40
     vec = C_FUE_Mat_IL{i};
     for j=1:size(vec,2)
         plot(i,vec(j), 'sr', 'LineWidth',1.5,'MarkerSize',10, 'MarkerFaceColor','r', 'MarkerEdgeColor','b');
@@ -101,6 +101,6 @@ plot(sum_FUE_IL, '--*b', 'LineWidth',1,'MarkerSize',10);
 % title('SUM capacity of cluster members','FontSize',14, 'FontWeight','bold');
 xlabel('Cluster size','FontSize',14, 'FontWeight','bold');
 ylabel('Capacity(b/s/HZ)','FontSize',14, 'FontWeight','bold');
-xlim([1 36]);
+% xlim([1 36]);
 % ylim([0 100]);
 % legend({'CDP-Q'},'FontSize',14, 'FontWeight','bold');
